@@ -1,7 +1,9 @@
 package com.vaadin.tutorial.crm.backend.entity;
 
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -21,9 +23,6 @@ public class Contact extends AbstractEntity implements Cloneable {
     @NotEmpty
     private String lastName = "";
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
 
     @Enumerated(EnumType.STRING)
     @NotNull
@@ -66,13 +65,6 @@ public class Contact extends AbstractEntity implements Cloneable {
         this.firstName = firstName;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
-    }
-
-    public Company getCompany() {
-        return company;
-    }
 
     @Override
     public String toString() {

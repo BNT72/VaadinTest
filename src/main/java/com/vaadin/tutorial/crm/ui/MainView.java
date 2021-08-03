@@ -1,6 +1,5 @@
 package com.vaadin.tutorial.crm.ui;
 
-import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
@@ -9,9 +8,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
-import com.vaadin.tutorial.crm.backend.entity.Company;
 import com.vaadin.tutorial.crm.backend.entity.Contact;
-import com.vaadin.tutorial.crm.backend.servise.CompanyService;
 import com.vaadin.tutorial.crm.backend.servise.ContactService;
 
 
@@ -23,13 +20,13 @@ public class MainView extends VerticalLayout {
     TextField filetText = new TextField();
     private ContactService service;
 
-    public MainView(ContactService service, CompanyService companyService) {
+    public MainView(ContactService service) {
         this.service = service;
         addClassName("list-view");
         setSizeFull();
         ConfigureGrid();
         getToolbar();
-        form = new ContactForm(companyService.findAll());
+        form = new ContactForm(service.findAll());
         form.addListener(ContactForm.SaveEvent.class, this::saveContact);
         form.addListener(ContactForm.CloseEvent.class,this::closeContact);
         form.addListener(ContactForm.DeleteEvent.class,this::deleteContact);
@@ -88,14 +85,11 @@ public class MainView extends VerticalLayout {
     }
 
     private void ConfigureGrid() {
+        //?????
         grid.addClassName("contact-grid");
         grid.setSizeFull();
-        grid.removeColumnByKey("company");
-        grid.setColumns("firstName", "lastName", "email", "status");
-        grid.addColumn(contact -> {
-            Company company = contact.getCompany();
-            return company == null ? "-" : company.getName();
-        }).setHeader("company");
+        grid.setColumns("firstName", "lastName", "email");
+
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(evt->editContact(evt.getValue()));
     }
